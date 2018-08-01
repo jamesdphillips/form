@@ -322,14 +322,9 @@ export const createIsEvent = (EventClass: Function) => (
     return true;
   }
 
-  // Duck-type SyntheticEvent instances
-  if (_event !== null && _event !== undefined && typeof _event === 'object') {
-    const constructor = _event.constructor;
-
-    if (constructor !== null && constructor !== undefined) {
-      const name = constructor.name;
-      return /^Synthetic[A-Z]*[a-z]*Event$/.test(name);
-    }
+  // Capture synthetic events
+  if (_event instanceof Object) {
+    return typeof _event.stopPropagation === 'function';
   }
 
   return false;
